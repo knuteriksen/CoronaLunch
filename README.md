@@ -1,4 +1,4 @@
-#Corona Lunch Partner
+# Corona Lunch Partner
 
 Made a small google script that sends an email to people that want to eat lunch online together during the COVID-19 lockdown.
 
