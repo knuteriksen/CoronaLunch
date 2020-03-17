@@ -58,11 +58,20 @@ function sendEmail() {
   var extras_email = [];
   var extras_study = [];
   var extras_msg = [];
-  
+ 
   for (var j = extras-1; j >= 0; j--){
-    extras_name.push(sheet.getRange(sheet.getLastRow()-j,2).getValue());
-    extras_email.push(sheet.getRange(sheet.getLastRow()-j,3).getValue().replace(/\s+/g, '').toLowerCase());
-    extras_msg.push(sheet.getRange(sheet.getLastRow()-j,4).getValue());
+    var email_working = 1;
+     try{
+      MailApp.sendEmail(sheet.getRange(sheet.getLastRow()-j,3).getValue().replace(/\s+/g, '').toLowerCase(),'test', 'test-message');
+    }
+    catch(err){
+      email_working = 0;
+    }
+    if (email_working){
+      extras_name.push(sheet.getRange(sheet.getLastRow()-j,2).getValue());
+      extras_email.push(sheet.getRange(sheet.getLastRow()-j,3).getValue().replace(/\s+/g, '').toLowerCase());
+      extras_msg.push(sheet.getRange(sheet.getLastRow()-j,4).getValue());
+    }
   }
   
   var iter = 0;
@@ -73,15 +82,24 @@ function sendEmail() {
     var about = 'Dette er hva dere har skrevet om dere selv:\n\n';
     var email ='';
     for (var t = 0; t< 4; t++){
-      greeting += sheet.getRange(i+t,2).getValue();
-      email += sheet.getRange(i+t,3).getValue().replace(/\s+/g, '').toLowerCase();
-      if (t < 3){
-        greeting += ', ';
-        email += ',';
+      var email_working = 1;
+      try{
+        MailApp.sendEmail(sheet.getRange(i+t,3).getValue().replace(/\s+/g, '').toLowerCase(),'test', 'test-message');
       }
-      about += sheet.getRange(i+t,2).getValue() + '\n' + sheet.getRange(i+t,4).getValue() + '\n ---------\n';
+      catch(err){
+        email_working = 0;
+      }
+      if (email_working){
+        greeting += sheet.getRange(i+t,2).getValue();
+        email += sheet.getRange(i+t,3).getValue().replace(/\s+/g, '').toLowerCase();
+        if (t < 3){
+          greeting += ', ';
+          email += ',';
+        }
+        about += sheet.getRange(i+t,2).getValue() + ':\n' + sheet.getRange(i+t,4).getValue() + '\n ---------\n';
+      }
     }
-       
+      
     if (extras > 0){
       if (groups == 1){
         for (var j = 0; j < extras; j++){
@@ -114,17 +132,17 @@ function sendEmail() {
     greeting += '!\n';
     
     //What the message should contain
+    const feedback = 'Send meg en melding om dere får denne!\n';
     const subject = 'ELSK 4.1!';
     const intro = 'Så kult at dere ville ha en ElektroniskLunsjSamtaleKamerat! \n';
     const contact = 'Ta kontakt med kameratene dine ved å trykke "Svar Alle" på denne eposten. \n';
     
     //Constructs the message
-    const message = [greeting, intro, contact, about, email].join('\n');
+    const message = [feedback,greeting, intro, contact, about].join('\n');
     Logger.log(message);
-    
     MailApp.sendEmail(email, subject, message);
-    iter ++;
-    }
+      
+  } 
 }
     
 //Triggers daily between 8 and 9 am and does the job                 
