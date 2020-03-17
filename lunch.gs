@@ -60,19 +60,10 @@ function sendEmail() {
   var extras_msg = [];
  
   for (var j = extras-1; j >= 0; j--){
-    var email_working = 1;
-     try{
-      MailApp.sendEmail(sheet.getRange(sheet.getLastRow()-j,3).getValue().replace(/\s+/g, '').toLowerCase(),'test', 'test-message');
-    }
-    catch(err){
-      email_working = 0;
-    }
-    if (email_working){
-      extras_name.push(sheet.getRange(sheet.getLastRow()-j,2).getValue());
-      extras_email.push(sheet.getRange(sheet.getLastRow()-j,3).getValue().replace(/\s+/g, '').toLowerCase());
+      extras_name.push(sheet.getRange(sheet.getLastRow()-j,3).getValue());
+      extras_email.push(sheet.getRange(sheet.getLastRow()-j,2).getValue().replace(/\s+/g, '').toLowerCase());
       extras_msg.push(sheet.getRange(sheet.getLastRow()-j,4).getValue());
     }
-  }
   
   var iter = 0;
   var end = rows - groupSize + 2;
@@ -81,23 +72,14 @@ function sendEmail() {
     var greeting = 'Hei '
     var about = 'Dette er hva dere har skrevet om dere selv:\n\n';
     var email ='';
-    for (var t = 0; t< 4; t++){
-      var email_working = 1;
-      try{
-        MailApp.sendEmail(sheet.getRange(i+t,3).getValue().replace(/\s+/g, '').toLowerCase(),'test', 'test-message');
+    for (var t = 0; t< groupSize; t++){
+      greeting += sheet.getRange(i+t,3).getValue();
+      email += sheet.getRange(i+t,2).getValue().replace(/\s+/g, '').toLowerCase();
+      if (t < 3){
+        greeting += ', ';
+        email += ',';
       }
-      catch(err){
-        email_working = 0;
-      }
-      if (email_working){
-        greeting += sheet.getRange(i+t,2).getValue();
-        email += sheet.getRange(i+t,3).getValue().replace(/\s+/g, '').toLowerCase();
-        if (t < 3){
-          greeting += ', ';
-          email += ',';
-        }
-        about += sheet.getRange(i+t,2).getValue() + ':\n' + sheet.getRange(i+t,4).getValue() + '\n ---------\n';
-      }
+      about += sheet.getRange(i+t,3).getValue() + ':\n' + sheet.getRange(i+t,4).getValue() + '\n ---------\n';
     }
       
     if (extras > 0){
@@ -132,14 +114,15 @@ function sendEmail() {
     greeting += '!\n';
     
     //What the message should contain
-    const feedback = 'Send meg en melding om dere får denne!\n';
-    const subject = 'ELSK 4.1!';
+    const feedback = 'Takk for at dere holder ut!\n';
+    const subject = 'Finalt test!';
     const intro = 'Så kult at dere ville ha en ElektroniskLunsjSamtaleKamerat! \n';
     const contact = 'Ta kontakt med kameratene dine ved å trykke "Svar Alle" på denne eposten. \n';
     
     //Constructs the message
     const message = [feedback,greeting, intro, contact, about].join('\n');
     Logger.log(message);
+    Logger.log(email);
     MailApp.sendEmail(email, subject, message);
       
   } 
