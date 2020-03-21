@@ -25,4 +25,4 @@ See [triggerDaily() at the bottom of lunch.gs](lunch.gs)
 
 ## 3. Run the trigger function
 Everything should now be functioning.
-Make sure that 'MailApp.sendEmail(email, subject, message);' is uncommented
+Make sure that `MailApp.sendEmail(email, subject, message);` is uncommented
