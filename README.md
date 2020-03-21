@@ -21,4 +21,8 @@ Question 1: Name
 Name the sheet "cancellations"
 
 ## 2. Set the trigger
-See [Contribution guidelines for this project](lunch.gs)
+See [triggerDaily() at the bottom of lunch.gs](lunch.gs)
+
+## 3. Run the trigger function
+Everything should now be functioning.
+Make sure that 'MailApp.sendEmail(email, subject, message);' is uncommented
