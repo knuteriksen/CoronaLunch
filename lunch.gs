@@ -2,7 +2,7 @@
 function removeDuplicates(){
   var ss = SpreadsheetApp.getActive();
   var sheet1 = ss.getSheetByName('responses');
-  var sheet2 = ss.getSheetByName('avmelding');
+  var sheet2 = ss.getSheetByName('cancellations');
    
   while (sheet2.getLastRow() >= 2){
     for (var j = 2; j <= sheet1.getLastRow(); j++){
@@ -123,16 +123,16 @@ function sendEmail() {
     const message = [feedback,greeting, intro, contact, about].join('\n');
     Logger.log(message);
     Logger.log(email);
-    MailApp.sendEmail(email, subject, message);
+    //MailApp.sendEmail(email, subject, message); //Uncomment this to let the script send emails
       
   } 
 }
     
-//Triggers daily between 8 and 9 am and does the job                 
+//Triggers the mail sending daily                
 function triggerDaily() {
   ScriptApp.newTrigger('sendEmail')
       .timeBased()
       .everyDays(1)
-      .atHour(8)
+      .atHour(8) //Which hour you want the email to bo sent
       .create();
 }
