@@ -21,4 +21,4 @@ Question 1: Name
 Name the sheet "cancellations"
 
 ## 2. Set the trigger
-See [Contribution guidelines for this project](koronalunsj.gs)
+See [Contribution guidelines for this project](lunsj.gs)
